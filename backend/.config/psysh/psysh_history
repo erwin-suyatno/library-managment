@@ -1,0 +1,4 @@
+\DB::table('users')->count();
+exit
+App\Models\User::where('email', 'admin@test.com')->first();
+exit
