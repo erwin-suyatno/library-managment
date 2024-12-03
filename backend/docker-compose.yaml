@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: library_management_app
+    container_name: library_management_app
+    restart: unless-stopped
+    volumes:
+      - .:/var/www/html
+      - ./logs:/var/logs
+    networks:
+      - library_net
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:random_key_here
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=library-managment
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+    depends_on:
+      db:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:alpine
+    container_name: library_management_nginx
+    restart: unless-stopped
+    ports:
+      - "9000:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx:/etc/nginx/conf.d/
+    networks:
+      - library_net
+    depends_on:
+      - app
+
+  db:
+    image: mysql:8
+    container_name: library_management_db
+    restart: unless-stopped
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: library-managment
+    ports:
+      - "3306:3306"
+    networks:
+      - library_net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-proot"]
+      interval: 10s
+      timeout: 20s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  db_data:
+
+networks:
+  library_net:
