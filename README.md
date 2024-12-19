@@ -20,16 +20,12 @@ Library Management System adalah aplikasi web modern yang dirancang untuk memuda
   - User authentication
   - Role-based access control (Admin/User)
   - User registration
-  - User management for admins (view, edit, delete users)
 
 - 📖 Borrowing System
   - Borrow books
   - Return books
   - Track borrowed books
   - Borrowing history
-
-- 🔒 Password Reset
-  - Users can reset their passwords via email verification.
 
 ## 🛠️ Tech Stack
 
@@ -105,7 +101,7 @@ yarn install
 
 3. Configure .env
 ```bash
-VITE_API_URL=http://localhost:9000/api
+VITE_API_URL=http://localhost:8000/api
 ```
 
 4. Start development server
@@ -172,15 +168,6 @@ The system supports two types of users:
 - POST /api/loans/borrow
 - PUT /api/loans/{id}/return
 
-### Users
-- GET /api/users
-- GET /api/users/{id}
-- PUT /api/users/{id}
-- GET /api/users/check-email/{email}
-- GET /api/users/email/{email}
-- DELETE /api/users/{id}
-- PUT /api/users/reset-password
-
 ## 🔨 Development
 
 ### Backend
@@ -190,24 +177,6 @@ php artisan test
 
 # Database refresh
 php artisan migrate:fresh --seed
-
-# Run migrations
-php artisan migrate
-
-# Run seeders
-php artisan db:seed
-
-# RUN with docker compose
-docker-compose up -d
-
-# Stop docker compose
-docker-compose down
-
-# Build docker compose
-docker-compose build --no-cache
-
-# Run docker compose migrations and seeders
-docker-compose exec app php artisan migrate:fresh --seed
 ```
 
 ### Frontend
@@ -220,9 +189,6 @@ npm run type-check
 
 # Linting
 npm run lint
-
-# Run Local
-npm run dev
 ```
 
 ## 🤝 Contributing
