@@ -68,7 +68,58 @@
 }
 ```
 
-### 2. Books API
+### 2. Users API
+
+#### List Users
+- **URL**: `/api/users`
+- **Method**: `GET`
+- **Headers**: `Authorization: Bearer <token>`
+- **Response**:
+```json
+{
+    "users": [
+        {
+            "id": 1,
+            "name": "string",
+            "email": "string",
+            "is_admin": "boolean",
+            "created_at": "date",
+            "updated_at": "date"
+        }
+    ]
+}
+```
+
+#### Reset Password
+- **URL**: `/api/users/reset-password`
+- **Method**: `PUT`
+- **Request Body**:
+```json
+{
+    "email": "string",
+    "password": "string",
+    "password_confirmation": "string"
+}
+```
+- **Response**:
+```json
+{
+    "message": "string"
+}
+```
+
+#### Check Email
+- **URL**: `/api/users/check-email/{email}`
+- **Method**: `GET`
+- **Request Body**:
+- **Response**:
+```json
+{
+    "exists": Boolean
+}
+```
+
+### 3. Books API
 
 #### List Books
 - **URL**: `/api/books`
@@ -192,7 +243,7 @@
 }
 ```
 
-### 3. Book Loans API
+### 4. Book Loans API
 
 #### List Book Loans
 - **URL**: `/api/loans`

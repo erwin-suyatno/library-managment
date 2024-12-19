@@ -31,12 +31,12 @@ app/
 │   │   └── Api/
 │   │       ├── AuthController.php
 │   │       ├── BookController.php
-│   │       └── BookLoanController.php
+│   │       ├── BookLoanController.php
+│   │       └── UserController.php
 │   ├── Resources/
 │   │   ├── BookResource.php
 │   │   └── BookLoanResource.php
-│   └── Requests/
-│       └── BookRequest.php
+│   └── Kernel.php
 ├── Models/
 │   ├── User.php
 │   ├── Book.php
