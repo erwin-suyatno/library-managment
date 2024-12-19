@@ -8,6 +8,7 @@ A modern web application for managing a library system built with Vue 3, TypeScr
 - 👤 User authentication
 - 📖 Book borrowing system
 - 👨‍💼 Admin dashboard for managing borrowed books
+- 👥 User management (Admin only)
 - 🎨 Modern and responsive UI
 - 🔍 Real-time search and filtering
 - 📱 Mobile-friendly design
@@ -42,7 +43,7 @@ yarn install
 
 3. Create a `.env` file
 ```bash
-VITE_API_URL=http://localhost:8000/api
+VITE_API_URL=http://localhost:9000/api
 ```
 
 4. Start the development server
@@ -60,10 +61,11 @@ frontend/
 │   ├── views/           # Page components
 │   ├── stores/          # Pinia state management
 │   ├── router/          # Vue Router configuration
-│   ├── assets/          # Static assets
-│   └── App.vue          # Root component
-├── public/              # Public static assets
-└── index.html          # Entry HTML file
+│   ├── docs/            # Documentation files
+│   ├── utils/           # Utility functions
+│   ├── services/        # API service calls
+│   ├── assets/          # Static assets like images
+│   └── App.vue          # Main application component
 ```
 
 ## 🔐 Authentication
@@ -75,18 +77,23 @@ The system supports two types of users:
 - **BookCard**: Card component for displaying book information
 - **BorrowBook**: Component for borrowing a book
 - **BorrowedCard**: Card component for displaying borrowed book information
-- **Pagination**: Component for handling pagination
-- **Navbar**: Navigation bar with links to different pages
+- **ChangePassword**: Component for changing user password
 - **FileInput**: Component for uploading files
 - **InputField**: Component for input fields
+- **LoadingScreen**: Component for displaying loading indicators
+- **Navbar**: Navigation bar with links to different pages
+- **NoData**: Component for displaying "No Data" message
+- **Pagination**: Component for handling pagination
 - **TextArea**: Component for text areas
 
 ## 📚 Pages
-- **Login**: Login page for user authentication
 - **BookList**: Page for displaying a list of books
-- **BorrowForm**: Page for borrowing a book
 - **BorrowedBooks**: Page for displaying a list of borrowed books
-- **AddBook**: Page for adding a new book
+- **CreateBook**: Page for creating a new book
+- **ForgotPassword**: Page for resetting user password
+- **ListUsers**: Page for displaying a list of users
+- **Login**: Login page for user authentication
+- **Register**: Page for user registration
 
 ## 🛠️ Utilities
 - **formatDate**: Utility function for formatting dates
@@ -133,6 +140,9 @@ npm run type-check
 
 # Linting
 npm run lint
+
+# Run Local
+npm run dev
 ```
 
 ## 📝 Environment Variables

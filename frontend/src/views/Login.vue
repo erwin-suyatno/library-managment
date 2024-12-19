@@ -2,39 +2,42 @@
 import { ref } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import { useRouter } from 'vue-router'
-import Register from '../components/Register.vue'
+import { requiredValidator, emailValidator } from '../utils/validator'
+import InputField from '../components/InputField.vue'
+import LoadingScreen from '../components/LoadingScreen.vue'
 
 const username = ref('')
 const password = ref('')
 const error = ref('')
 const showRegister = ref(false)
+const isLoading = ref(false)
 
 const authStore = useAuthStore()
 const router = useRouter()
 
 const handleLogin = async () => {
   error.value = ''  // Reset error message
-  
+  isLoading.value = true;
+
   const payload = {
     email: username.value,
     password: password.value
   }
-  
   try {
-    const success: any = await authStore.Login(payload)
-    if (success) {
-      console.log('Login successful, navigating to /books')
-      await router.push('/books')
-    }
+    await authStore.Login(payload)
   } catch (err: any) {
     console.error('Login error:', err)
     error.value = err.response?.data?.message || 'Login failed'
+  } finally {
+    isLoading.value = false
+    await router.push('/books')
   }
 }
 </script>
 
 <template>
   <div v-if="!showRegister" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+    <LoadingScreen :isLoading="isLoading" />
     <div class="card max-w-md w-full space-y-8 p-8">
       <div>
         <div class="text-center text-4xl mb-2">📚</div>
@@ -48,46 +51,33 @@ const handleLogin = async () => {
       <form @submit.prevent="handleLogin" class="mt-8 space-y-6">
         <div class="space-y-4">
           <div>
-            <label for="username" class="block text-sm font-medium text-gray-700">
-              Username
-            </label>
-            <div class="mt-1">
-              <input
-                id="username"
-                v-model="username"
-                type="text"
-                required
-                class="input"
-                placeholder="Enter your username"
-              />
-            </div>
+            <InputField
+              label="Email"
+              v-model="username"
+              placeholder="Enter Email"
+              :rules="[requiredValidator, emailValidator]"
+            />
           </div>
           <div>
-            <label for="password" class="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <div class="mt-1">
-              <input
-                id="password"
-                v-model="password"
-                type="password"
-                required
-                class="input"
-                placeholder="Enter your password"
-              />
-            </div>
+            <InputField
+              label="Password"
+              v-model="password"
+              type="password"
+              placeholder="Enter Password"
+              :rules="[requiredValidator]"
+            />
           </div>
         </div>
 
         <div>
           <div class="flex items-center justify-between">
             <div class="text-sm">
-              <a href="#" class="font-medium text-blue-600 hover:text-blue-500" @click.prevent="showRegister = true">
+              <a href="/register" class="font-medium text-blue-600 hover:text-blue-500">
                 Register
               </a>
             </div>
             <div class="text-sm">
-              <a href="#" class="font-medium text-blue-600 hover:text-blue-500">
+              <a href="/forgot-password" class="font-medium text-blue-600 hover:text-blue-500">
                 Forgot your password?
               </a>
             </div>
@@ -101,8 +91,5 @@ const handleLogin = async () => {
         </div>
       </form>
     </div>
-  </div>
-  <div v-if="showRegister" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
-    <Register @switch-to-login="showRegister = false" />
   </div>
 </template>

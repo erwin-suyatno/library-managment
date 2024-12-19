@@ -15,7 +15,7 @@
    npm install
 
    # Create .env file
-   echo "VITE_API_URL=http://localhost:8000/api" > .env
+   echo "VITE_API_URL=http://localhost:9000/api" > .env
 
    # Start development server
    npm run dev

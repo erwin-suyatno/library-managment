@@ -52,6 +52,14 @@ const toggleMenu = () => {
             >
               Add Book
             </router-link>
+            <router-link 
+              v-if="user.is_admin === true"
+              to="/users" 
+              class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
+              active-class="text-indigo-600 bg-indigo-50"
+            >
+              Users
+            </router-link>
           </div>
         </div>
         
@@ -113,6 +121,20 @@ const toggleMenu = () => {
           active-class="text-indigo-600 bg-indigo-50"
         >
           Borrowed Books
+        </router-link>
+        <router-link 
+          to="/add-book" 
+          class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
+          active-class="text-indigo-600 bg-indigo-50"
+        >
+          Add Book
+        </router-link>
+        <router-link 
+          to="/users" 
+          class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
+          active-class="text-indigo-600 bg-indigo-50"
+        >
+          Users
         </router-link>
         <button 
           @click="handleLogout" 

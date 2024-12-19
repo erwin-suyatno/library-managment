@@ -6,6 +6,8 @@ import BorrowBook from '../components/BorrowBook.vue'
 import { useLoanBookStore } from '../stores/loadBook'
 import { useBookStore } from '../stores/books'
 import Navbar from '../components/Navbar.vue'
+import LoadingScreen from '../components/LoadingScreen.vue'
+import NoData from '../components/NoData.vue'
 
 const bookStore = useBookStore()
 const loanBookStore = useLoanBookStore()
@@ -21,10 +23,19 @@ const snackbarType = ref('success')
 // Dialog state
 const showBorrowDialog = ref(false)
 const selectedBook = ref(null)
+const isLoading = ref(false)
 
 onMounted(async () => {
   localStorage.removeItem('idBookBorrow')
-  await bookStore.fetchBooks()
+  try {
+    isLoading.value = true
+    await bookStore.fetchBooks()
+  } catch (error) {
+    console.error('Error fetching books:', error)
+    showNotification('Failed to fetch books', 'error')
+  } finally {
+    isLoading.value = false
+  }
 })
 
 const filteredBooks = computed(() => {
@@ -89,6 +100,7 @@ const handleBorrowBook = async (formData: any) => {
 
 <template>
   <div class="min-h-screen bg-gray-50">
+    <LoadingScreen :isLoading="isLoading" />
     <Navbar class="sticky top-0 z-50" />
     <main class="container py-8">
       <!-- Snackbar -->
@@ -119,7 +131,10 @@ const handleBorrowBook = async (formData: any) => {
         </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div v-if="filteredBooks.length === 0">
+        <NoData />
+      </div>
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <BookCard 
           v-for="book in paginatedBooks" 
           :key="book.id" 
@@ -127,13 +142,13 @@ const handleBorrowBook = async (formData: any) => {
           @delete-book="deleteBook(book.id)"
           @borrow-click="handleBorrowClick(book)"
         />
+        <Pagination
+          v-if="filteredBooks.length > itemsPerPage"
+          :total-items="filteredBooks.length"
+          :items-per-page="itemsPerPage"
+          v-model:current-page="currentPage"
+        />
       </div>
-      <Pagination
-        v-if="filteredBooks.length > itemsPerPage"
-        :total-items="filteredBooks.length"
-        :items-per-page="itemsPerPage"
-        v-model:current-page="currentPage"
-      />
       <BorrowBook
         :show="showBorrowDialog"
         :book="selectedBook"

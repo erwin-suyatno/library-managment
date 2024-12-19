@@ -22,7 +22,7 @@ defineEmits<{
 </script>
 
 <template>
-  <div class="card overflow-hidden">
+  <div class="bg-white shadow-md rounded-lg overflow-hidden transition-transform transform hover:scale-105">
     <img :src="book.cover" :alt="book.title" class="w-full h-48 object-cover" />
     <div class="p-4">
       <h2 class="text-xl font-semibold text-gray-900 mb-2">{{ book.title }}</h2>

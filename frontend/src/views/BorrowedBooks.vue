@@ -4,6 +4,8 @@ import { useLoanBookStore } from '../stores/loadBook'
 import Pagination from '../components/Pagination.vue'
 import BorrowedCard from '../components/BorrowedCard.vue';
 import Navbar from '../components/Navbar.vue'
+import LoadingScreen from '../components/LoadingScreen.vue'
+import NoData from '../components/NoData.vue'
 
 const loanBookStore = useLoanBookStore()
 
@@ -15,6 +17,8 @@ const itemsPerPage = 8
 const showSnackbar = ref(false)
 const snackbarMessage = ref('')
 const snackbarType = ref('success')
+
+const isLoading = ref(false)
 
 const filteredBooks = computed(() => {
   const query = searchQuery.value.toLowerCase()
@@ -50,13 +54,22 @@ const returnBook = async (id: number) => {
   }
 }
 
-onMounted(() => {
-  loanBookStore.fetchLoanBooks()
+onMounted(async () => {
+  try {
+    isLoading.value = true
+    await loanBookStore.fetchLoanBooks()
+  } catch (error) {
+    console.error('Error fetching loan books:', error)
+    showNotification('Failed to fetch loan books', 'error')
+  } finally {
+    isLoading.value = false
+  }
 })
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-50">
+    <LoadingScreen :isLoading="isLoading" />
     <Navbar class="sticky top-0 z-50" />
     <main class="container py-8">
       <!-- Snackbar -->
@@ -85,7 +98,10 @@ onMounted(() => {
         </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+      <div v-if="filteredBooks.length === 0">
+        <NoData />
+      </div>
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
         <BorrowedCard
           v-for="loanBook in paginatedBooks"
           :key="loanBook.id"

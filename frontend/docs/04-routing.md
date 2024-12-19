@@ -7,6 +7,9 @@
 - /borrowed: Borrowed books (Admin only)
 - /create-book: Create new book (Admin only)
 - /borrow-form: Book borrowing form
+- /register: User registration
+- /forgot-password: Password reset
+- /users: User management (Admin only)
 
 ## Views
 ### Login.vue
@@ -15,6 +18,26 @@
   - User authentication form
   - Error handling
   - Redirect after login
+
+### Register.vue
+- Path: /register
+- Features:
+  - User registration form
+  - Input validation
+  - Redirect after successful registration
+
+### ForgotPassword.vue
+- Path: /forgot-password
+- Features:
+  - Password reset request form
+  - Input validation
+  - Notification on success or failure
+
+### ListUsers.vue
+- Path: /users
+- Features:
+  - Display all users
+  - Admin management capabilities
 
 ### BookList.vue
 - Path: /books
