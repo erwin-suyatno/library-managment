@@ -23,8 +23,8 @@ const isLoading = ref(false)
 const filteredBooks = computed(() => {
   const query = searchQuery.value.toLowerCase()
   return loanBookStore.loanBooks.filter(loanBook => 
-    loanBook.book.title.toLowerCase().includes(query) || 
-    loanBook.book.author.toLowerCase().includes(query)
+    loanBook?.book?.title.toLowerCase().includes(query) || 
+    loanBook?.book?.author.toLowerCase().includes(query)
   )
 })
 
@@ -44,13 +44,16 @@ const showNotification = (message: string, type: 'success' | 'error' = 'success'
 }
 
 const returnBook = async (id: number) => {
+  isLoading.value = true
   try {
     await loanBookStore.returnBook(id)
     await loanBookStore.fetchLoanBooks()
-    await showNotification('Book returned successfully')
+    showNotification('Book returned successfully')
   } catch (error) {
     console.error('Error returning book:', error)
     await showNotification('Failed to return book', 'error')
+  } finally {
+    isLoading.value = false
   }
 }
 

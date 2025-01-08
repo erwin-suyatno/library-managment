@@ -25,8 +25,7 @@ const showBorrowDialog = ref(false)
 const selectedBook = ref(null)
 const isLoading = ref(false)
 
-onMounted(async () => {
-  localStorage.removeItem('idBookBorrow')
+const fetchBooks = async () => {
   try {
     isLoading.value = true
     await bookStore.fetchBooks()
@@ -36,6 +35,11 @@ onMounted(async () => {
   } finally {
     isLoading.value = false
   }
+}
+
+onMounted(async () => {
+  localStorage.removeItem('idBookBorrow')
+  fetchBooks()
 })
 
 const filteredBooks = computed(() => {
@@ -64,7 +68,7 @@ const showNotification = (message: string, type: 'success' | 'error' = 'success'
 const deleteBook = async (id: number) => {
   try {
     await bookStore.deleteBook(id)
-    await bookStore.fetchBooks()
+    await fetchBooks()
     showNotification('Book deleted successfully')
   } catch (error) {
     console.error('Error deleting book:', error)
@@ -87,6 +91,7 @@ const handleBorrowBook = async (formData: any) => {
       user_id: user.id,
       book_id: selectedBook.value.id,
     })
+    await fetchBooks()
     showNotification('Book borrowed successfully')
     showBorrowDialog.value = false
     return Promise.resolve()

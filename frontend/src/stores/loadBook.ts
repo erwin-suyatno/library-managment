@@ -16,7 +16,6 @@ export const useLoanBookStore = defineStore('loanBooks', {
         axios.get('/loans')
           .then((response) => {
             this.loanBooks = response.data.data
-            console.log(this.loanBooks);
             
             resolve(response)
           })

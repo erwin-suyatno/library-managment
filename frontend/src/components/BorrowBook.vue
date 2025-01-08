@@ -20,11 +20,12 @@ defineProps<{
 
 const emit = defineEmits(['close', 'submit'])
 
+const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '{}') : {}
 const form = ref({
   user_id: null,
   book_id: null,
-  name: '',
-  email: '',
+  name: user.name || '',
+  email: user.email || '',
 })
 
 const loading = ref(false)
@@ -63,14 +64,6 @@ const handleSubmit = async () => {
     loading.value = false
   }
 }
-
-const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '{}') : {}
-onMounted(() => {
-  if (user.is_admin) {
-    form.value.name = user.name
-    form.value.email = user.email
-  }
-})
 </script>
 
 <template>
