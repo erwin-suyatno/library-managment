@@ -10,8 +10,8 @@ pipeline {
         stage('Build & Deploy Backend') {
             steps {
                 dir('backend') {  // Pindah ke folder backend
-                    bash 'docker-compose build'
-                    bash 'docker-compose up -d'
+                    powershell 'docker-compose build'
+                    powershell 'docker-compose up -d'
                 }
             }
         }
